@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Шайхана Шаңырақ — Мәзір</title>
+<style>
+  :root{--bg:#f6f0e2;--card:#fffaf0;--ink:#1f1b16;--gold:#b8793a;--gold-d:#96602a;--line:#d9c7a3;--muted:#7a6a55}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:Georgia,"Times New Roman",serif;line-height:1.35}
+  .wrap{max-width:560px;margin:0 auto;padding:16px 16px 110px}
+  header{text-align:center;padding:20px 8px 8px}
+  .sub{letter-spacing:.2em;font-size:15px;margin:0}
+  h1{margin:2px 0 6px;font-size:40px;letter-spacing:.02em}
+  .tag{color:var(--gold);font-style:italic;font-size:17px;margin:0 0 10px}
+  .halal{display:inline-block;border:1.5px solid var(--ink);border-radius:20px;padding:2px 12px;font-size:12px;font-weight:bold;letter-spacing:.1em}
+  .lang{display:flex;gap:8px;justify-content:center;margin:14px 0 6px;position:sticky;top:0;background:var(--bg);padding:8px 0;z-index:5}
+  .lang button{font:inherit;border:1.5px solid var(--gold);background:transparent;color:var(--gold);padding:6px 20px;border-radius:20px;cursor:pointer;font-size:15px}
+  .lang button.on{background:var(--gold);color:#fff}
+  section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:14px 0}
+  h2{margin:0 0 6px;text-align:center;font-size:17px;letter-spacing:.06em;text-transform:uppercase;border-bottom:1px solid var(--line);padding-bottom:8px}
+  .row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px dotted #cdbb96}
+  .row:last-child{border-bottom:0}
+  .info{flex:1;min-width:0}
+  .n{font-size:17px}
+  .p{color:var(--gold-d);font-weight:bold;font-size:15px}
+  .ctl{display:flex;align-items:center;gap:8px}
+  .ctl button{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--gold);background:#fff;color:var(--gold-d);font-size:22px;line-height:1;cursor:pointer;padding:0}
+  .ctl button.add{background:var(--gold);color:#fff}
+  .ctl .q{min-width:18px;text-align:center;font-weight:bold;font-size:17px}
+  .note{text-align:center;color:var(--muted);font-size:14px;letter-spacing:.05em;text-transform:uppercase;padding:6px 0}
+  #bar{position:fixed;left:0;right:0;bottom:0;padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(transparent,var(--bg) 30%);display:none;z-index:10}
+  #bar button{display:flex;justify-content:space-between;width:100%;max-width:560px;margin:0 auto;font:inherit;font-size:18px;background:var(--gold);color:#fff;border:0;border-radius:14px;padding:15px 18px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.2)}
+  #sheet{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;z-index:20;align-items:flex-end}
+  #sheet.open{display:flex}
+  .panel{background:var(--card);width:100%;max-width:560px;margin:0 auto;border-radius:20px 20px 0 0;max-height:92vh;overflow:auto;padding:18px 16px calc(18px + env(safe-area-inset-bottom))}
+  .panel h3{margin:0 0 10px;font-size:21px;display:flex;justify-content:space-between;align-items:center}
+  .x{background:none;border:0;font-size:28px;cursor:pointer;color:var(--muted)}
+  .line{display:flex;gap:8px;align-items:center;padding:7px 0;border-bottom:1px dotted #cdbb96}
+  .line .t{flex:1;font-size:16px}
+  .line .s{font-weight:bold;white-space:nowrap}
+  .total{display:flex;justify-content:space-between;font-size:20px;font-weight:bold;padding:12px 0}
+  label{display:block;font-size:14px;color:var(--muted);margin:10px 0 4px}
+  input,textarea{width:100%;font:inherit;font-size:16px;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+  .seg{display:flex;gap:8px}
+  .seg button{flex:1;font:inherit;font-size:16px;padding:10px;border:1.5px solid var(--gold);background:#fff;color:var(--gold-d);border-radius:10px;cursor:pointer}
+  .seg button.on{background:var(--gold);color:#fff}
+  .send{width:100%;margin-top:16px;font:inherit;font-size:18px;background:#25a244;color:#fff;border:0;border-radius:14px;padding:15px;cursor:pointer}
+  .clear{width:100%;margin-top:8px;font:inherit;font-size:15px;background:none;border:0;color:var(--muted);padding:8px;cursor:pointer}
+  .err{color:#b3261e;font-size:14px;margin-top:6px;display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="sub">шайхана</p>
+    <h1>ШАҢЫРАҚ</h1>
+    <p class="tag">Үйдің дәмі, жүректің жылуы</p>
+    <span class="halal">HALAL · حلال</span>
+  </header>
+  <div class="lang">
+    <button id="b-kk" onclick="setLang('kk')">Қазақша</button>
+    <button id="b-ru" onclick="setLang('ru')">Русский</button>
+  </div>
+  <main id="menu"></main>
+  <div class="note" id="foot"></div>
+</div>
+
+<div id="bar"><button onclick="openSheet()"><span id="bar-l"></span><span id="bar-r"></span></button></div>
+
+<div id="sheet" onclick="if(event.target===this)closeSheet()">
+  <div class="panel">
+    <h3><span id="s-title"></span><button class="x" onclick="closeSheet()">×</button></h3>
+    <div id="lines"></div>
+    <div class="total"><span id="s-total"></span><span id="s-sum"></span></div>
+
+    <div class="seg">
+      <button id="m-table" onclick="setMode('table')"></button>
+      <button id="m-pickup" onclick="setMode('pickup')"></button>
+    </div>
+    <div id="f-table"><label id="l-table" for="table"></label><input id="table" inputmode="numeric" maxlength="6"></div>
+    <label id="l-name" for="name"></label><input id="name" autocomplete="name">
+    <label id="l-phone" for="phone"></label><input id="phone" type="tel" inputmode="tel" autocomplete="tel">
+    <label id="l-comment" for="comment"></label><textarea id="comment" rows="2"></textarea>
+    <div class="err" id="err"></div>
+    <button class="send" id="send" onclick="sendOrder()"></button>
+    <button class="clear" id="clear" onclick="clearCart()"></button>
+  </div>
+</div>
+
+<script>
+/* ===== ОСЫНЫ ӨЗГЕРТІҢІЗ / ИЗМЕНИТЕ ЭТО ===== */
+const WHATSAPP = "77756065001"; // Кафенің WhatsApp нөмірі, + және бос орынсыз (мысалы 77011234567)
+/* ========================================= */
+
+const MENU=[
+ {kk:"Негізгі тағамдар",ru:"Основные блюда",items:[
+  ["Палау","Плов",1500],["Сорпа","Сорпа",1500],["Лағман","Лагман",2000],
+  ["Қуырылған ет","Жаркое",1600],["Қуырдақ","Куырдак",1200],["Тұшпара","Пельмени",1200],
+  ["Мәнті (1 дана)","Манты (1 шт)",350]]},
+ {kk:"Сорпалар",ru:"Супы",items:[
+  ["Борщ","Борщ",800],["Рассольник","Рассольник",800],["Кеспе","Лапша",800],["Окрошка","Окрошка",800]]},
+ {kk:"Гарнирлер",ru:"Гарниры",items:[
+  ["Картоп езбесі","Пюре",300],["Қарақұмық","Гречка",300],["Макарон","Макароны",300],["Күріш","Рис",300]]},
+ {kk:"Гарнирге қосымша",ru:"Добавки к гарниру",items:[
+  ["Котлет","Котлета",700],["Гуляш","Гуляш",1000]]},
+ {kk:"Қамыр өнімдері",ru:"Выпечка",items:[
+  ["Тауық етінен самса","Самса с курицей",500],["Сиыр етінен самса","Самса с говядиной",500],
+  ["Чебурек","Чебурек",400],["Таба нан","Лепёшка",150],
+  ["Бауырсақ (1 дана)","Баурсак (1 шт)",70],["Бауырсақ (1 кг)","Баурсак (1 кг)",1800]]},
+ {kk:"Сусындар",ru:"Напитки",items:[
+  ["Компот","Компот",200],["Қара шай","Чай чёрный",200],["Көк шай","Чай зелёный",250],
+  ["Лимон қосылған шай","Чай с лимоном",250],["Сүт қосылған шай","Чай с молоком",250],
+  ["Қара кофе","Кофе чёрный",200],["Сүт қосылған кофе","Кофе с молоком",250],["Қымыз","Кумыс",500],
+  ["Қара шай шәйнегі","Чайник чёрного чая",800],["Көк шай шәйнегі","Чайник зелёного чая",1000],
+  ["Сүт қосылған шай шәйнегі","Чайник с молоком",1000],["«Ташкент» шай шәйнегі","Чайник «Ташкент»",1000]]}
+];
+/* Бір id = бөлім-индекс-тағам индексі */
+const ITEMS={};MENU.forEach((s,si)=>s.items.forEach((it,ii)=>{ITEMS[si+"-"+ii]={kk:it[0],ru:it[1],price:it[2]}}));
+
+const T={
+ kk:{foot:"Бізде өзіне-өзі қызмет көрсету",view:"Себет",order:"Тапсырыс",total:"Барлығы",
+  table:"Үстелде",pickup:"Өзіммен алып кетемін",tableNo:"Үстел нөмірі",name:"Атыңыз",phone:"Телефон (міндетті емес)",
+  comment:"Тілек (міндетті емес)",send:"WhatsApp арқылы жіберу",clear:"Себетті тазалау",
+  eTable:"Үстел нөмірін жазыңыз",eName:"Атыңызды жазыңыз",empty:"Себет бос",
+  hi:"Сәлем! Жаңа тапсырыс:",lTable:"Үстел",lPickup:"Алып кету",lName:"Аты",lPhone:"Тел",lComment:"Тілек",lTotal:"Барлығы"},
+ ru:{foot:"У нас самообслуживание",view:"Корзина",order:"Заказ",total:"Итого",
+  table:"За столом",pickup:"С собой",tableNo:"Номер стола",name:"Ваше имя",phone:"Телефон (необязательно)",
+  comment:"Пожелания (необязательно)",send:"Отправить в WhatsApp",clear:"Очистить корзину",
+  eTable:"Укажите номер стола",eName:"Укажите имя",empty:"Корзина пуста",
+  hi:"Здравствуйте! Новый заказ:",lTable:"Стол",lPickup:"С собой",lName:"Имя",lPhone:"Тел",lComment:"Пожелания",lTotal:"Итого"}
+};
+let lang="kk",cart={},mode="table";
+try{cart=JSON.parse(localStorage.getItem("cart")||"{}")||{}}catch(e){}
+try{lang=localStorage.getItem("lang")||((navigator.language||"").startsWith("ru")?"ru":"kk")}catch(e){}
+const $=id=>document.getElementById(id);
+const fmt=n=>n.toLocaleString("ru-RU").replace(/\u00a0/g," ")+" ₸";
+function save(){try{localStorage.setItem("cart",JSON.stringify(cart))}catch(e){}}
+
+function render(){
+  const t=T[lang];
+  document.documentElement.lang=lang;
+  $("b-kk").classList.toggle("on",lang==="kk");$("b-ru").classList.toggle("on",lang==="ru");
+  $("menu").innerHTML=MENU.map((s,si)=>`<section><h2>${s[lang]}</h2>`+s.items.map((_,ii)=>{
+    const id=si+"-"+ii,it=ITEMS[id],q=cart[id]||0;
+    return `<div class="row"><div class="info"><div class="n">${it[lang]}</div><div class="p">${fmt(it.price)}</div></div>
+      <div class="ctl">${q?`<button onclick="chg('${id}',-1)">−</button><span class="q">${q}</span>`:""}<button class="${q?"":"add"}" onclick="chg('${id}',1)">+</button></div></div>`;
+  }).join("")+`</section>`).join("");
+  $("foot").textContent=t.foot;
+  $("s-title").textContent=t.order;$("s-total").textContent=t.total;
+  $("m-table").textContent=t.table;$("m-pickup").textContent=t.pickup;
+  $("l-table").textContent=t.tableNo;$("l-name").textContent=t.name;$("l-phone").textContent=t.phone;$("l-comment").textContent=t.comment;
+  $("send").textContent=t.send;$("clear").textContent=t.clear;
+  bar();lines();setMode(mode);
+}
+function totals(){let c=0,s=0;for(const id in cart){if(ITEMS[id]){c+=cart[id];s+=cart[id]*ITEMS[id].price}}return{c,s}}
+function bar(){const{c,s}=totals();$("bar").style.display=c?"block":"none";$("bar-l").textContent=T[lang].view+" · "+c;$("bar-r").textContent=fmt(s)}
+function lines(){
+  $("lines").innerHTML=Object.keys(cart).filter(id=>ITEMS[id]).map(id=>{const it=ITEMS[id],q=cart[id];
+    return `<div class="line"><span class="t">${it[lang]}</span><div class="ctl"><button onclick="chg('${id}',-1)">−</button><span class="q">${q}</span><button onclick="chg('${id}',1)">+</button></div><span class="s">${fmt(q*it.price)}</span></div>`}).join("");
+  $("s-sum").textContent=fmt(totals().s);
+}
+function chg(id,d){cart[id]=Math.max(0,(cart[id]||0)+d);if(!cart[id])delete cart[id];save();render();if(!totals().c)closeSheet()}
+function setLang(l){lang=l;try{localStorage.setItem("lang",l)}catch(e){}render()}
+function setMode(m){mode=m;$("m-table").classList.toggle("on",m==="table");$("m-pickup").classList.toggle("on",m==="pickup");$("f-table").style.display=m==="table"?"block":"none"}
+function openSheet(){lines();$("sheet").classList.add("open")}
+function closeSheet(){$("sheet").classList.remove("open")}
+function clearCart(){cart={};save();render();closeSheet()}
+function sendOrder(){
+  const t=T[lang],{c,s}=totals(),err=$("err");
+  err.style.display="none";
+  if(!c){err.textContent=t.empty;err.style.display="block";return}
+  const table=$("table").value.trim(),name=$("name").value.trim(),phone=$("phone").value.trim(),com=$("comment").value.trim();
+  if(mode==="table"&&!table){err.textContent=t.eTable;err.style.display="block";return}
+  if(!name){err.textContent=t.eName;err.style.display="block";return}
+  let m=t.hi+"\n\n";
+  for(const id in cart){if(ITEMS[id])m+=`• ${ITEMS[id][lang]} × ${cart[id]} — ${fmt(cart[id]*ITEMS[id].price)}\n`}
+  m+=`\n${t.lTotal}: ${fmt(s)}\n`;
+  m+=mode==="table"?`${t.lTable}: ${table}\n`:`${t.lPickup}\n`;
+  m+=`${t.lName}: ${name}\n`;
+  if(phone)m+=`${t.lPhone}: ${phone}\n`;
+  if(com)m+=`${t.lComment}: ${com}\n`;
+  window.location.href="https://wa.me/"+WHATSAPP+"?text="+encodeURIComponent(m);
+}
+render();
+</script>
+</body>
+</html>
